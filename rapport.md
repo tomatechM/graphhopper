@@ -71,10 +71,48 @@ Chiril Reabitchi
 
 ## Score de mutation des tests originaux :
 
+<img width="1185" height="503" alt="TestsMuatationsOrigaux" src="https://github.com/user-attachments/assets/596a9308-a3ac-48e0-a2ab-86ee1b3bc6ec" />
+
+* Mutants générés : 269
+* Mutants tués : 4
+* Score de mutation : environ 1.5 % (car 4/269)
+* Couverture de ligne : 1 %
+
 ## Score de mutation avec les nouveaux tests : 
+
+<img width="1244" height="450" alt="TestsMutationsNouveaux" src="https://github.com/user-attachments/assets/cf62e37b-af81-4bb2-8f8f-961ea2801c21" />
+
+* Mutants générés : 269
+* Mutants tués : 27
+* Score de mutation : environ 10 % (car 27/269)
+* Couverture de ligne : 9 %
+
+## Les nouveaux tests détectent-ils de nouveaux mutants ?
+
+Oui.
+
+* Les nouveaux tests ont permis de tuer 23 mutants supplémentaires (27 - 4)
+* Les catégories concernées incluent:
+    - PrimitiveReturnsMutator
+    - VoidMethodCallMutator
+    - RemoveConditionalMutator_EQUAL_ELSE 
+    - NullReturnValsMutator
+    - MathMutator 
+    - EmptyObjectReturnValsMutator
+
+* Pourquoi ?
+
+* Les nouveaux tests couvrent davantage de méthodes et de branches de GHUtility tel que : 
+    - Les méthodes de création de géométrie (rectangle, cercle)
+    - Les méthodes utilitaires sur les ensembles, les clés arêtes, la génération aléatoire
+* Cela force PIT à muter des instructions qui n'étaient pas exécutées par les tests originaux.
 
 ## Test qui utilise java-faker : [GHUtilityTest.java](./core/src/test/java/com/graphhopper/util/GHUtilityTest.java)
 
-* Intention du test: utilisation de java‑faker pour générer coordonnées plausibles et vérifier que le polygone circle a un centroïde proche du centre fourni.
-* Motivation des données du test: Faker avec seed fixe (12345L) → id généré, latitude/longitude normalisées (virgule→point), radius aléatoire entre 100 et 5000 m.tester createCircle sur valeurs réelles/variées tout en restant déterministe; vérifier cohérence géométrique du polygone généré.
-* Explication de l'oracle: id égal ; geometry instance de Polygon ; calcul du centroïde → distance centroid‑centre ≤ (radius * 0.2 + 1.0). (Tolérance empirique pour approximation de centroïde vs projection/discrétisation du polygone.)
+* Intention du test : utilisation de java‑faker pour générer coordonnées plausibles et vérifier que le polygone circle a un centroïde proche du centre fourni.
+* Motivation des données du test : Faker avec seed fixe (12345L) → id généré, latitude/longitude normalisées (virgule→point), radius aléatoire entre 100 et 5000 m.
+    - tester createCircle sur valeurs réelles/variées tout en restant déterministe; vérifier cohérence géométrique du polygone généré.
+* Explication de l'oracle : 
+    - id égal;
+    - geometry instance de Polygon;
+    - calcul du centroïde → distance centroid‑centre ≤ (radius * 0.2 + 1.0). (Tolérance empirique pour approximation de centroïde vs projection/discrétisation du polygone.)
