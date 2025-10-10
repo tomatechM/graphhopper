@@ -69,6 +69,12 @@ Chiril Reabitchi
     - pour chaque id, getEdgeFromEdgeKey(k1/k2) == id;
     - l’ensemble des clés a taille N*2 (pas de collisions).
 
+## Génération du rapport PIT
+Pour générer le rapport, éxécutez la commande : 
+```bash
+mvn -pl core org.pitest:pitest-maven:mutationCoverage
+```
+Vous devriez trouver le rapport dans /core/target/pit-reports
 ## Score de mutation des tests originaux :
 
 <img width="1185" height="503" alt="TestsMuatationsOrigaux" src="https://github.com/user-attachments/assets/596a9308-a3ac-48e0-a2ab-86ee1b3bc6ec" />
