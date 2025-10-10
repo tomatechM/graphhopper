@@ -49,7 +49,7 @@ Chiril Reabitchi
 * Explication de l'oracle:pour chaque id, getEdgeFromEdgeKey(k1/k2) == id ; l’ensemble des clés a taille N*2 (pas de collisions).
 
 ## Score de mutation des tests originaux :
-
+<img width="1185" height="503" alt="TestsMuatationsOrigaux" src="https://github.com/user-attachments/assets/596a9308-a3ac-48e0-a2ab-86ee1b3bc6ec" />
 ## Score de mutation avec les nouveaux tests : 
 
 ## Test qui utilise java-faker : [GHUtilityTest.java](./core/src/test/java/com/graphhopper/util/GHUtilityTest.java)
