@@ -65,7 +65,7 @@ public class GHUtilityTest {
 //        assertEquals(-1, map2.get(3));
     }
 
-        @org.junit.jupiter.api.Test
+    @org.junit.jupiter.api.Test
     public void testEdgeKeyRoundtrip() {
         int edgeId = 7;
         int keyTrue = GHUtility.createEdgeKey(edgeId, true);
@@ -151,5 +151,26 @@ public class GHUtilityTest {
         }
         // chaque paire (id,false) et (id,true) doit produire des clés distinctes
         org.junit.jupiter.api.Assertions.assertEquals(N * 2, keys.size());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testCreateCircleCentroidCloseWithFaker() {
+        com.github.javafaker.Faker faker = new com.github.javafaker.Faker(new java.util.Random(12345L));
+        String id = faker.company().name().replaceAll("[^A-Za-z0-9_\\-]", "_");
+        // java-faker peut renvoyer des nombres avec ',' comme séparateur décimal (locale) -> normaliser
+        String latStr = faker.address().latitude().replace(',', '.');
+        String lonStr = faker.address().longitude().replace(',', '.');
+        double centerLat = Double.parseDouble(latStr);
+        double centerLon = Double.parseDouble(lonStr);
+        int radius = faker.number().numberBetween(100, 5000);
+ 
+        com.graphhopper.util.JsonFeature circle = GHUtility.createCircle(id, centerLat, centerLon, radius);
+        org.junit.jupiter.api.Assertions.assertEquals(id, circle.getId());
+        org.junit.jupiter.api.Assertions.assertNotNull(circle.getGeometry());
+        org.junit.jupiter.api.Assertions.assertTrue(circle.getGeometry() instanceof org.locationtech.jts.geom.Polygon);
+        org.locationtech.jts.geom.Polygon p = (org.locationtech.jts.geom.Polygon) circle.getGeometry();
+        org.locationtech.jts.geom.Point centroid = p.getCentroid();
+        double dist = com.graphhopper.util.DistanceCalcEarth.DIST_EARTH.calcDist(centerLat, centerLon, centroid.getY(), centroid.getX());
+        org.junit.jupiter.api.Assertions.assertTrue(dist <= radius * 0.2 + 1.0, "centroid doit être proche du centre: " + dist + " vs radius " + radius);
     }
 }
