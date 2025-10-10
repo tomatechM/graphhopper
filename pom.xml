@@ -303,12 +303,22 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.12.0</version>
+                <version>1.19.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.2</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <!-- adapte les valeurs ci‑dessous si nécessaire -->
                     <targetClasses>
-                        <param>com.graphhopper.*</param>
+                        <param>com.graphhopper.util.GHUtility*</param>
                     </targetClasses>
+                    <targetTests>
+                        <param>com.graphhopper.util.GHUtilityTest*</param>
+                    </targetTests>
                     <outputFormats>
                         <param>HTML</param>
                         <param>XML</param>
