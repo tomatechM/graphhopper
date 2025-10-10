@@ -300,6 +300,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.12.0</version>
+                <configuration>
+                    <!-- adapte les valeurs ci‑dessous si nécessaire -->
+                    <targetClasses>
+                        <param>com.graphhopper.*</param>
+                    </targetClasses>
+                    <outputFormats>
+                        <param>HTML</param>
+                        <param>XML</param>
+                    </outputFormats>
+                    <threads>4</threads>
+                    <mutators>DEFAULTS</mutators>
+                    <!-- éviter d'exécuter PIT sur les tests eux-mêmes -->
+                    <avoidCallsTo>org.junit</avoidCallsTo>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
