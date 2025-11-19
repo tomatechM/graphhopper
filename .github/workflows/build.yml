@@ -58,6 +58,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       
+      - name: Build all modules before PIT
+        run: mvn -B -DskipTests install
+      
       - name: Read mutation baseline (default 0 if missing)
         id: baseline
         run: |
