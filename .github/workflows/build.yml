@@ -40,7 +40,6 @@ jobs:
     name: Mutation score check
     runs-on: ubuntu-latest
     needs: build
-    if: github.repository_owner == 'graphhopper'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
