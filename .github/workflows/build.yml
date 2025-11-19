@@ -70,9 +70,7 @@ jobs:
 
       
       - name: Run PIT mutation analysis
-        run: mvn -pl core org.pitest:pitest-maven:mutationCoverage \
-              -DmutationThreshold=${{ steps.baseline.outputs.baseline }} \
-              -Dverbose=true
+        run: mvn -pl core org.pitest:pitest-maven:mutationCoverage -DmutationThreshold=${{ steps.baseline.outputs.baseline }} -Dverbose=true
     
       - name: Upload PIT report
         if: always()
