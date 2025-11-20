@@ -54,9 +54,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: mutation_baseline.txt
-          key: mutation-baseline-${{ github.ref_name }}
+          key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
           restore-keys: |
-            mutation-baseline-${{ github.ref_name }}
+            mutation-baseline-${{ github.ref_name }}-
 
       - name: Read baseline value
         id: baseline
