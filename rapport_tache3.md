@@ -1,5 +1,5 @@
 # Auteurs
-Mohamed Atmani
+Mohamed Atmani,
 Chiril Reabitchi
 
 
@@ -35,10 +35,68 @@ Validation de la modification :
 
 
 - On peut voir que le score de mutation courant est de 9 %, ce qui est supérieur au score précedent de 2 %.
-
 - Ensuite, on a fait un deuxième push, mais cette fois en mettant la majorité des tests dans GHUtilityTest.java en commentaires :
 
 <img width="1357" height="197" alt="build failed" src="https://github.com/user-attachments/assets/9eb5f263-f080-4164-9b54-8f76bb0197e0" />
 
-
 - On peut voir que le build échoue vu que le score de mutation diminue de 9% à 2%.
+
+
+# Classes simulés (Mockito)
+
+## Première classe testée et simulée : [Downloader.java](./core/src/main/java/com/graphhopper/util/Downloader.java)
+
+Justifications du choix :
+- La classe fait des requêtes HTTP, ouvre des streams et lit/écrit des fichiers.
+- Elle parle à un URL extérieur (http://graphhopper.com/public/maps/0.1/europe_germany_berlin.ghz)
+- La classe gère la décompression, les timeouts, les codes HTTP, ce qui est trop complexe pour un test unitaire.
+
+Méthodes simulées :
+- downloadAsString(String url, boolean)
+- fetch(String url)
+
+### Fichier de test mockito : [DownloaderMockitoTest.java](./core/src/test/java/com/graphhopper/util/DownloaderMockitoTest.java)
+
+Définition des mocks :
+* ```Downloader mockedDownloader = Mockito.mock(Downloader.class)```
+    - Crée un mock complet de la classe Downloader ce qui permet de définir le comportement attendu des méthodes sans effectuer de vrais requêtes réseau.
+
+* ```InputStream fakeStream = new ByteArrayInputStream("Hello".getBytes())```
+    - Simule la lecture d'un fichier
+
+* ```when(mockedDownloader.fetch("http://test.com")).thenReturn(fakeStream)```
+    - Simule une réponse HTTP. Retourne "Hello" si on fetch le faux url
+
+Choix des valeurs simulées :
+- "http://fake-url.com" et "http://test.com" : URL fictives pour éviter des dépendances réseau.
+- "FAKE_RESPONSE" et "Hello" : String simulés pour valider que chaque méthode retourne exactement ce qui est attendu.
+
+
+## Deuxième classe testée et simulée : [NativeFSLockFactory.java](./core/src/main/java/com/graphhopper/storage/NativeFSLockFactory.java)
+
+Justifications du choix :
+- Les verrous dépendent du système de fichiers et peuvent échouer selon l’état réel du fichier.
+- Les mocks permettent de tester la logique interne tels que le tryLock, release, de façon fiable.
+
+Méthodes simulées :
+- tryLock()
+- isLocked()
+- release()
+
+### Fichier de test mockito : [NativeFSLockFactoryMockitoTest.java](./core/src/test/java/com/graphhopper/storage/NativeFSLockFactoryMockitoTest.java)
+
+Définition des mocks :
+* ```NativeFSLockFactory.NativeLock mockLock = mock(NativeFSLockFactory.NativeLock.class)```
+    - Remplace un vérrou réel par un mock
+    - Permet de vérifier la logique de isLocked et release si le lock est obtenu avec succès ou non
+
+* ```when(mockLock.tryLock()).thenReturn(true/false)```, ```when(mockLock.isLocked()).thenReturn(true/false)```
+    - Dépendamment de si le lock est obtenu ou non, on retourne true ou false
+
+* ```doNothing().when(mockLock).release()```
+    - Si le lock a été obtenu, il devrait release(), sinon, il ne devrait pas y avoir d'appels de la fonction.
+
+Choix des valeurs simulées : 
+- true ou false pour tryLock et isLocked : permet de tester toutes les branches du code (succès et échec).
+- doNothing() pour release : permet de simuler la libération du verrou sans toucher au système de fichiers.
+
