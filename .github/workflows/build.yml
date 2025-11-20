@@ -136,7 +136,7 @@ jobs:
 
            # 🎵 Rickroll si le build échoue 🎵
       - name: Rickroll si le score de mutation baisse 😈
-        if: failure()
+        if: ${{ failure() && steps.compare.outcome == 'failure' }}
         uses: TejasvOnly/random-rickroll@v1.0
         with:
           percentage: 100
