@@ -323,9 +323,13 @@
                     <jvmArgs><value>-Xmx512m</value></jvmArgs>
                     <targetClasses>
                         <param>com.graphhopper.util.GHUtility*</param>
+                        <param>com.graphhopper.util.Downloader*</param>
+                        <param>com.graphhopper.storage.NativeFSLockFactory*</param>
                     </targetClasses>
                     <targetTests>
                         <param>com.graphhopper.util.GHUtilityTest*</param>
+                        <param>com.graphhopper.util.DownloaderMockitoTest*</param>
+                        <param>com.graphhopper.storage.NativeFSLockFactoryMockitoTest*</param>
                     </targetTests>
                     <outputFormats>
                         <param>HTML</param>
