@@ -31,10 +31,14 @@ Validation de la modification :
 - On a fait une analyse de mutation sur [GHUtilityTest.java](./core/src/test/java/com/graphhopper/util/GHUtilityTest.java)
 - On a fait un premier push avec tous les tests de GHUtilityTest.java actifs : 
 
+<img width="1380" height="177" alt="build success" src="https://github.com/user-attachments/assets/d76a8495-0536-4ef3-ac18-fe86101299f2" />
+
 
 - On peut voir que le score de mutation courant est de 9 %, ce qui est supérieur au score précedent de 2 %.
 
 - Ensuite, on a fait un deuxième push, mais cette fois en mettant la majorité des tests dans GHUtilityTest.java en commentaires :
+
+<img width="1357" height="197" alt="build failed" src="https://github.com/user-attachments/assets/9eb5f263-f080-4164-9b54-8f76bb0197e0" />
 
 
 - On peut voir que le build échoue vu que le score de mutation diminue de 9% à 2%.
