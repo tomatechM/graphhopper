@@ -178,6 +178,7 @@ mutation:
       permissions:
         issues: write   # pour commenter sur l'issue
 
+
       steps:
         - name: Rick Roll
           uses: TejasvOnly/random-rickroll@v1.0
