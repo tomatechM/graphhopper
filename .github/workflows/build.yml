@@ -39,16 +39,17 @@ jobs:
             ${{ runner.os}}-node_modules-
       - name: Build ${{ matrix.java-version }}
         run: mvn -B clean test
+
   mutation:
     runs-on: ubuntu-latest
     needs: build
     if: always()
-    
+
     permissions:
       contents: read
       issues: write
       pull-requests: write
-      
+
     steps:
       - uses: actions/checkout@v4
 
@@ -121,25 +122,36 @@ jobs:
           echo "Current  score : $CUR"
 
           if [ "$CUR" -lt "$BASE" ]; then
-            echo "❌ Mutation score decreased ($CUR < $BASE). Failing build."
-            exit 1
+            echo "❌ Mutation score decreased ($CUR < $BASE)."
+            echo "decreased=true" >> $GITHUB_OUTPUT
           else
             echo "✔ Mutation score OK ($CUR >= $BASE)"
+            echo "decreased=false" >> $GITHUB_OUTPUT
           fi
 
+      # On ne met à jour le baseline que si le score n’a PAS baissé
       - name: Save new baseline file
+        if: ${{ steps.compare.outputs.decreased == 'false' }}
         run: |
           echo "${{ steps.parse.outputs.score }}" > mutation_baseline.txt
 
       - name: Save new baseline into cache
+        if: ${{ steps.compare.outputs.decreased == 'false' }}
         uses: actions/cache/save@v4
         with:
           path: mutation_baseline.txt
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
-           # 🎵 Rickroll si le build échoue 🎵
+      # 🎵 Rickroll si le score a baissé, seulement sur une PR 🎵
       - name: Rickroll si le score de mutation baisse 😈
-        if: failure()
+        if: ${{ steps.compare.outputs.decreased == 'true' && github.event_name == 'pull_request' }}
         uses: TejasvOnly/random-rickroll@v1.0
         with:
           percentage: 100
+
+      # On fait finalement échouer le job si le score a baissé
+      - name: Fail build when mutation score decreased
+        if: ${{ steps.compare.outputs.decreased == 'true' }}
+        run: |
+          echo "❌ Mutation score decreased. Failing job."
+          exit 1
