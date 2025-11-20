@@ -49,12 +49,12 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Download previous mutation baseline (if any)
-        uses: actions/download-artifact@v4
+      - name: Restore previous mutation baseline
+        id: restore-baseline
+        uses: actions/cache/restore@v4
         with:
-          name: mutation-baseline
-          path: .
-        continue-on-error: true
+          path: mutation_baseline.txt
+          key: mutation-baseline-${{ github.ref_name }}
 
       - name: Read baseline value
         id: baseline
@@ -118,12 +118,11 @@ jobs:
           fi
 
       - name: Save new baseline as artifact
-        if: always()
         run: |
           echo "${{ steps.parse.outputs.score }}" > mutation_baseline.txt
-        # overwrite previous
-      - uses: actions/upload-artifact@v4
-        if: always()
+
+      - name: Save new baseline into cache
+        uses: actions/cache/save@v4
         with:
-          name: mutation-baseline
           path: mutation_baseline.txt
+          key: mutation-baseline-${{ github.ref_name }}
