@@ -1,6 +1,6 @@
 package com.graphhopper.util;
 
-import com.graphhopper.util.Downloader;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
