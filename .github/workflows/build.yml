@@ -117,7 +117,7 @@ jobs:
             echo "✔ Mutation score OK ($CUR >= $BASE)"
           fi
 
-      - name: Save new baseline as artifact
+      - name: Save new baseline file
         run: |
           echo "${{ steps.parse.outputs.score }}" > mutation_baseline.txt
 
