@@ -128,3 +128,10 @@ jobs:
         with:
           path: mutation_baseline.txt
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
+
+           # 🎵 Rickroll si le build échoue 🎵
+      - name: Rickroll si le score de mutation baisse 😈
+        if: failure()
+        uses: TejasvOnly/random-rickroll@v1.0
+        with:
+          percentage: 100
