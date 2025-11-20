@@ -1,5 +1,7 @@
 name: Build and Test
-on: push
+on:
+  push:
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -136,7 +138,7 @@ jobs:
 
            # 🎵 Rickroll si le build échoue 🎵
       - name: Rickroll si le score de mutation baisse 😈
-        if: ${{ failure() && steps.compare.outcome == 'failure' }}
+        if: ${{ failure() && steps.compare.outcome == 'failure' && github.event_name == 'pull_request' }}
         uses: TejasvOnly/random-rickroll@v1.0
         with:
           percentage: 100
