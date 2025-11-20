@@ -1,6 +1,8 @@
 name: Build and Test
 on:
   push:
+  issues:
+    types: [opened]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,14 +39,14 @@ jobs:
             ${{ runner.os}}-node_modules-
       - name: Build ${{ matrix.java-version }}
         run: mvn -B clean test
-  mutation:
+mutation:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: build
-    if: always()
 
     permissions:
       contents: read
-      issues: write      # pour pouvoir créer une issue
+      issues: write   # nécessaire pour créer une issue
 
     steps:
       - uses: actions/checkout@v4
@@ -137,7 +139,7 @@ jobs:
           path: mutation_baseline.txt
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
-      # 👉 Création d'une issue quand le score de mutation baisse
+      # Création d'une issue quand le score de mutation baisse
       - name: Open issue when mutation score decreased
         if: ${{ steps.compare.outputs.decreased == 'true' }}
         uses: actions/github-script@v7
@@ -160,9 +162,24 @@ jobs:
               body,
             });
 
-      # Et on fait échouer le job (comme demandé dans le TP)
+      # On fait échouer le job (comme demandé dans le TP) si le score a baissé
       - name: Fail build when mutation score decreased
         if: ${{ steps.compare.outputs.decreased == 'true' }}
         run: |
           echo "❌ Mutation score decreased. Failing job."
           exit 1
+
+    rickroll:
+      if: >
+        github.event_name == 'issues' &&
+        startsWith(github.event.issue.title, 'Mutation score decreased')
+      runs-on: ubuntu-latest
+
+      permissions:
+        issues: write   # pour commenter sur l'issue
+
+      steps:
+        - name: Rick Roll
+          uses: TejasvOnly/random-rickroll@v1.0
+          with:
+            percentage: 100
