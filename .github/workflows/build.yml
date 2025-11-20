@@ -39,15 +39,16 @@ jobs:
             ${{ runner.os}}-node_modules-
       - name: Build ${{ matrix.java-version }}
         run: mvn -B clean test
-mutation:
-    if: github.event_name == 'push'
+  mutation:
     runs-on: ubuntu-latest
     needs: build
-
+    if: always()
+    
     permissions:
       contents: read
-      issues: write   # nécessaire pour créer une issue
-
+      issues: write
+      pull-requests: write
+      
     steps:
       - uses: actions/checkout@v4
 
@@ -103,6 +104,7 @@ mutation:
 
           score = m.group(1)
           print(f"Extracted mutation score: {score}")
+          print(f"score={score}")  # for debugging
           with open("current_score.txt", "w") as f:
             f.write(score)
           EOF
@@ -119,68 +121,25 @@ mutation:
           echo "Current  score : $CUR"
 
           if [ "$CUR" -lt "$BASE" ]; then
-            echo "❌ Mutation score decreased ($CUR < $BASE)."
-            echo "decreased=true" >> $GITHUB_OUTPUT
+            echo "❌ Mutation score decreased ($CUR < $BASE). Failing build.
+            exit 1
           else
             echo "✔ Mutation score OK ($CUR >= $BASE)"
-            echo "decreased=false" >> $GITHUB_OUTPUT
           fi
 
-      # On met à jour le baseline seulement si le score n'a PAS baissé
       - name: Save new baseline file
-        if: ${{ steps.compare.outputs.decreased == 'false' }}
         run: |
           echo "${{ steps.parse.outputs.score }}" > mutation_baseline.txt
 
       - name: Save new baseline into cache
-        if: ${{ steps.compare.outputs.decreased == 'false' }}
         uses: actions/cache/save@v4
         with:
           path: mutation_baseline.txt
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
-      # Création d'une issue quand le score de mutation baisse
-      - name: Open issue when mutation score decreased
-        if: ${{ steps.compare.outputs.decreased == 'true' }}
-        uses: actions/github-script@v7
-        env:
-          BASE: ${{ steps.baseline.outputs.baseline }}
-          CUR: ${{ steps.parse.outputs.score }}
+           # 🎵 Rickroll si le build échoue 🎵
+      - name: Rickroll si le score de mutation baisse 😈
+        if: failure()
+        uses: TejasvOnly/random-rickroll@v1.0
         with:
-          github-token: ${{ github.token }}
-          script: |
-            const base = process.env.BASE;
-            const cur = process.env.CUR;
-            const title = `Mutation score decreased (${cur} < ${base})`;
-            const body =
-              `The mutation score decreased from ${base}% to ${cur}% on commit ${context.sha}.\n\n` +
-              `Time for a rickroll!`;
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title,
-              body,
-            });
-
-      # On fait échouer le job (comme demandé dans le TP) si le score a baissé
-      - name: Fail build when mutation score decreased
-        if: ${{ steps.compare.outputs.decreased == 'true' }}
-        run: |
-          echo "❌ Mutation score decreased. Failing job."
-          exit 1
-
-    rickroll:
-      if: >
-        github.event_name == 'issues' &&
-        startsWith(github.event.issue.title, 'Mutation score decreased')
-      runs-on: ubuntu-latest
-
-      permissions:
-        issues: write   # pour commenter sur l'issue
-
-
-      steps:
-        - name: Rick Roll
-          uses: TejasvOnly/random-rickroll@v1.0
-          with:
-            percentage: 100
+          percentage: 100
