@@ -71,7 +71,7 @@ jobs:
           fi
 
       - name: Build module core before PIT
-        run: mvn -B -pl core -DskipTests install
+        run: mvn -B -pl core -am -DskipTests install
 
       - name: Run PIT mutation analysis
         run: mvn -B -pl core org.pitest:pitest-maven:mutationCoverage
