@@ -1,0 +1,21 @@
+#Credits to TejasvOnly
+name: "Rickroll"
+description: "Affiche un Rickroll dans les logs du workflow"
+inputs:
+  message:
+    description: "Message supplémentaire à afficher"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Never gonna give you up
+      shell: bash
+      run: |
+        echo "======================================="
+        echo "🎵  NEVER GONNA GIVE YOU UP  🎵"
+        echo "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        echo "======================================="
+        if [ -n "${{ inputs.message }}" ]; then
+          echo "${{ inputs.message }}"
+        fi
