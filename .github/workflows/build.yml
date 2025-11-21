@@ -138,6 +138,6 @@ jobs:
 
            # 🎵 Rickroll si le build échoue 🎵
 
-      - name: Très important à re
+      - name: Très important à regarder!!!
         run: |
           curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash
