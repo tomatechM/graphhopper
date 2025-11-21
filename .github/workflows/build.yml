@@ -139,6 +139,6 @@ jobs:
            # 🎵 Rickroll si le build échoue 🎵
       - name: Rickroll si le score de mutation baisse 😈
         if: failure()
-        uses: ./.github/actions/rickroll.yml
+        uses: ./.github/actions/rickroll
         with:
           message: "Mutation score decreased for commit ${{ github.sha }}"
