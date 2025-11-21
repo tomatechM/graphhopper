@@ -137,8 +137,9 @@ jobs:
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
            # 🎵 Rickroll si le build échoue 🎵
-      - name: Très important de regarder le score de mutation qui a baissé dans le link 
-        if: failure()
-        uses: ./.github/actions/rickroll
-        with:
-          message: "Mutation score decreased for commit ${{ github.sha }}"
+  rickroll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rickroll
+        run: |
+          curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash
