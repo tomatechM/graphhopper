@@ -1,17 +1,13 @@
-#Credits to TejasvOnly
 name: "Rickroll"
-description: "Affiche un Rickroll dans les logs du workflow"
-inputs:
-  message:
-    description: "Message supplémentaire à afficher"
-    required: false
+description: "Lien caché vers le score de mutation (Rickroll)"
 
 runs:
   using: "composite"
   steps:
-    - name: Rickroll link
+    - name: Affichage du lien Rickroll
       shell: bash
       run: |
-        # Affichage dans les logs
+        # Affiche le lien en Markdown dans les logs
         echo "[Regarder le score de mutation](https://www.youtube.com/watch?v=dQw4w9WgXcQ)"
+
       
