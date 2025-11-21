@@ -137,13 +137,8 @@ jobs:
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
            # 🎵 Rickroll si le build échoue 🎵
-  rickroll:
-    needs: build
-    runs-on: ubuntu-latest
-    if: failure()
-    steps:
-      - name: Never gonna give you up
-        run: |
-          echo "Le score de mutation a diminué"
-          echo "Never gonna give you up, never gonna let you down"
-          echo "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      - name: Rickroll si le score de mutation baisse 😈
+        if: failure()
+        uses: ./.github/actions/rickroll
+        with:
+          message: "Mutation score decreased for commit ${{ github.sha }}"
