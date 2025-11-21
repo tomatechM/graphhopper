@@ -13,5 +13,5 @@ runs:
       shell: bash
       run: |
         # Affichage dans les logs
-        echo "[résultats des tests de mutations](https://www.youtube.com/watch?v=dQw4w9WgXcQ)"
+        echo "[Regarder le score de mutation](https://www.youtube.com/watch?v=dQw4w9WgXcQ)"
         fi
