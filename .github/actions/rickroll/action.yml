@@ -4,10 +4,13 @@ description: "Lien caché vers le score de mutation (Rickroll)"
 runs:
   using: "composite"
   steps:
-    - name: Affichage du lien Rickroll
+    - name: Ajouter le lien caché
       shell: bash
       run: |
-        # Affiche le lien en Markdown dans les logs
-        echo "[Regarder le score de mutation](https://www.youtube.com/watch?v=dQw4w9WgXcQ)"
+        # On n'affiche rien dans les logs, seulement dans le résumé
+        if [ -n "$GITHUB_STEP_SUMMARY" ]; then
+          echo "[Regarder le score de mutation](https://www.youtube.com/watch?v=dQw4w9WgXcQ)" >> "$GITHUB_STEP_SUMMARY"
+        fi
+
 
       
