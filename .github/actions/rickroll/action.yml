@@ -9,30 +9,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Never gonna give you up
+    - name: Rickroll link
       shell: bash
-      env:
-        MSG: ${{ inputs.message }}
-        
       run: |
-        # --- Logs classiques ---
-        echo "======================================="
-        echo "🎵  NEVER GONNA GIVE YOU UP  🎵"
-        echo "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        echo "======================================="
-        if [ -n "$MSG" ]; then
-          echo "$MSG"
-        fi
-
-        # --- Résumé du job (avec GIF) ---
-        if [ -n "$GITHUB_STEP_SUMMARY" ]; then
-          {
-            echo "## Rickroll 😈"
-            echo
-            echo "![Rickroll GIF](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
-            echo
-            if [ -n "$MSG" ]; then
-              echo "$MSG"
-            fi
-          } >> "$GITHUB_STEP_SUMMARY"
+        # Affichage dans les logs
+        echo "[résultats des tests de mutations](https://www.youtube.com/watch?v=dQw4w9WgXcQ)"
         fi
