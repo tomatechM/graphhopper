@@ -137,9 +137,7 @@ jobs:
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
            # 🎵 Rickroll si le build échoue 🎵
-  rickroll:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Rickroll
+
+      - name: Très important à re
         run: |
           curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash
