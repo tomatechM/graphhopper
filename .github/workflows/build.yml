@@ -140,5 +140,3 @@ jobs:
       - name: Très important de regarder le score de mutation qui a baissé dans le link 
         if: failure()
         uses: ./.github/actions/rickroll
-        with:
-          message: "Mutation score decreased for commit ${{ github.sha }}"
