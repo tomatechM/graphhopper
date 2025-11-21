@@ -137,7 +137,7 @@ jobs:
           key: mutation-baseline-${{ github.ref_name }}-${{ github.run_id }}
 
            # 🎵 Rickroll si le build échoue 🎵
-      - name: Très important de regarder le score de mutation dans le link qui a baissé
+      - name: Très important de regarder le score de mutation qui a baissé dans le link 
         if: failure()
         uses: ./.github/actions/rickroll
         with:
