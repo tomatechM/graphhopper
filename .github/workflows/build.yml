@@ -1,8 +1,7 @@
 name: Build and Test
 on:
   push:
-  issues:
-    types: [opened]
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -107,8 +106,8 @@ jobs:
           print(f"score={score}")  # for debugging
           with open("current_score.txt", "w") as f:
             f.write(score)
+            
           EOF
-
           echo "score=$(cat current_score.txt)" >> $GITHUB_OUTPUT
 
       - name: Compare current score to baseline
@@ -126,7 +125,7 @@ jobs:
           else
             echo "✔ Mutation score OK ($CUR >= $BASE)"
           fi
-
+          
       - name: Save new baseline file
         run: |
           echo "${{ steps.parse.outputs.score }}" > mutation_baseline.txt
